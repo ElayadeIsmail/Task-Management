@@ -25,22 +25,26 @@ export class TasksController {
   }
 
   @Get()
-  findAll() {
-    return this.tasksService.findAll();
+  findAll(@ActiveUser('sub') currentUserId: string) {
+    return this.tasksService.findAll(currentUserId);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.tasksService.findOne(+id);
+  findOne(@Param('id') id: string, @ActiveUser('sub') currentUserId: string) {
+    return this.tasksService.findOne(id, currentUserId);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
-    return this.tasksService.update(+id, updateTaskDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateTaskDto: UpdateTaskDto,
+    @ActiveUser('sub') currentUserId: string,
+  ) {
+    return this.tasksService.update(id, updateTaskDto, currentUserId);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tasksService.remove(+id);
+  remove(@Param('id') id: string, @ActiveUser('sub') currentUserId: string) {
+    return this.tasksService.remove(id, currentUserId);
   }
 }
