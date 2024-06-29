@@ -54,4 +54,9 @@ export class AuthenticationController {
   async currentUser(@ActiveUser('sub') currentUserId: string) {
     return this.authenticationService.currentUser(currentUserId);
   }
+
+  @Post('/logout')
+  async logout(@Res({ passthrough: true }) response: Response) {
+    return this.authenticationService.logout(response);
+  }
 }
