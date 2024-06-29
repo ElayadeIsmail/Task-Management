@@ -1,4 +1,9 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
@@ -10,6 +15,7 @@ import {
 } from '../iam.constants';
 import { ActiveUserData } from '../interfaces/active-user-interface';
 import jwtConfig from './config/jwt.config';
+import { SignInDto } from './dto/sign-in.dto';
 import { SignUpDto } from './dto/sign-up.dto';
 import { HashingService } from './hashing/hashing.service';
 
@@ -43,6 +49,29 @@ export class AuthenticationService {
         id: true,
       },
     });
+    return this.setTokenToCookies(user, response);
+  }
+
+  async signIn(body: SignInDto, response: Response) {
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        username: body.username,
+      },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    const isPasswordMatches = this.hashingService.compare(
+      body.password,
+      user.hashedPassword,
+    );
+
+    if (!isPasswordMatches) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
     return this.setTokenToCookies(user, response);
   }
 
