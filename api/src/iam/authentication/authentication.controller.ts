@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
@@ -10,6 +11,8 @@ import {
 import { Request, Response } from 'express';
 import { COOKIE_REFRESH_TOKEN_KEY } from '../iam.constants';
 import { AuthenticationService } from './authentication.service';
+import { ActiveUser } from './decorators/active-user.decorator';
+import { Public } from './decorators/public.decorator';
 import { SignInDto } from './dto/sign-in.dto';
 import { SignUpDto } from './dto/sign-up.dto';
 
@@ -17,6 +20,7 @@ import { SignUpDto } from './dto/sign-up.dto';
 export class AuthenticationController {
   constructor(private readonly authenticationService: AuthenticationService) {}
 
+  @Public()
   @Post('sign-up')
   async signUp(
     @Body() body: SignUpDto,
@@ -25,6 +29,7 @@ export class AuthenticationController {
     return this.authenticationService.signUp(body, response);
   }
 
+  @Public()
   @HttpCode(HttpStatus.OK)
   @Post('sign-in')
   async signIn(
@@ -34,6 +39,7 @@ export class AuthenticationController {
     return this.authenticationService.signIn(body, response);
   }
 
+  @Public()
   @HttpCode(HttpStatus.OK)
   @Post('/refresh-token')
   async refreshToken(
@@ -42,5 +48,10 @@ export class AuthenticationController {
   ) {
     const refreshToken = request.cookies[COOKIE_REFRESH_TOKEN_KEY] ?? '';
     return this.authenticationService.refreshToken(refreshToken, response);
+  }
+
+  @Get('/current-user')
+  async currentUser(@ActiveUser('sub') currentUserId: string) {
+    return this.authenticationService.currentUser(currentUserId);
   }
 }
