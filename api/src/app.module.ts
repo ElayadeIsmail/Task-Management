@@ -4,6 +4,7 @@ import * as Joi from 'joi';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { IamModule } from './iam/iam.module';
+import { TasksModule } from './tasks/tasks.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { IamModule } from './iam/iam.module';
       }),
     }),
     IamModule,
+    TasksModule,
   ],
   controllers: [AppController],
   providers: [AppService],
