@@ -11,6 +11,7 @@ import { AppService } from './app.service';
         NODE_ENV: Joi.string()
           .valid('development', 'production', 'test')
           .default('development'),
+        DATABASE_URL: Joi.string(),
         PORT: Joi.number().port().default(8081),
       }),
     }),
