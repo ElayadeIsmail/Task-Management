@@ -4,9 +4,11 @@ import {
   HttpCode,
   HttpStatus,
   Post,
+  Req,
   Res,
 } from '@nestjs/common';
-import { Response } from 'express';
+import { Request, Response } from 'express';
+import { COOKIE_REFRESH_TOKEN_KEY } from '../iam.constants';
 import { AuthenticationService } from './authentication.service';
 import { SignInDto } from './dto/sign-in.dto';
 import { SignUpDto } from './dto/sign-up.dto';
@@ -30,5 +32,15 @@ export class AuthenticationController {
     @Res({ passthrough: true }) response: Response,
   ) {
     return this.authenticationService.signIn(body, response);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('/refresh-token')
+  async refreshToken(
+    @Res({ passthrough: true }) response: Response,
+    @Req() request: Request,
+  ) {
+    const refreshToken = request.cookies[COOKIE_REFRESH_TOKEN_KEY] ?? '';
+    return this.authenticationService.refreshToken(refreshToken, response);
   }
 }
