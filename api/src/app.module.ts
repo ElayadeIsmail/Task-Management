@@ -19,6 +19,7 @@ import { TasksModule } from './tasks/tasks.module';
         JWT_TOKEN_ISSUER: Joi.string(),
         JWT_ACCESS_TOKEN_TT: Joi.number().positive(),
         JWT_REFRESH_TOKEN_TTL: Joi.number().positive(),
+        CORS_ORIGINS: Joi.string(),
         PORT: Joi.number().port().default(8081),
       }),
     }),

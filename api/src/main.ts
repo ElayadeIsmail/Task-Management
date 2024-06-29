@@ -30,6 +30,12 @@ async function bootstrap() {
     }),
   );
 
+  // Enable Corse
+  app.enableCors({
+    credentials: true,
+    origin: configService.get<string>('CORS_ORIGINS').split(','),
+  });
+
   await app.listen(configService.get<number>('PORT'));
 }
 bootstrap();
