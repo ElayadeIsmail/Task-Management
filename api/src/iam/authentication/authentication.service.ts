@@ -104,6 +104,27 @@ export class AuthenticationService {
     return { id: user.id, username: user.username };
   }
 
+  async refreshToken(refreshToken: string, response: Response) {
+    try {
+      const payload = await this.jwtService.verifyAsync<ActiveUserData>(
+        refreshToken,
+        {
+          audience: this.jwtConfiguration.audience,
+          issuer: this.jwtConfiguration.issuer,
+          secret: this.jwtConfiguration.secret,
+        },
+      );
+      const user = await this.prismaService.user.findUniqueOrThrow({
+        where: {
+          id: payload.sub,
+        },
+      });
+      return this.setTokenToCookies(user, response);
+    } catch (error) {
+      throw new BadRequestException();
+    }
+  }
+
   private async signToken(
     userId: string,
     expiresIn: number,
