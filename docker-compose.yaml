@@ -1,0 +1,23 @@
+services:
+  api:
+    container_name: task_managment_api
+    build: ./api
+    env_file:
+      - ./api/.env.prod
+    ports:
+      - "8081:8081"
+  postgres:
+    container_name: task_managment_postgres
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+      PGDATA: /data/postgres
+    volumes:
+       - ./postgres:/data/postgres
+    ports:
+      - "5432:5432"
+
+volumes:
+    postgres:
