@@ -1,6 +1,7 @@
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
@@ -29,6 +30,15 @@ async function bootstrap() {
       },
     }),
   );
+
+  // Enable Swagger
+  const config = new DocumentBuilder()
+    .setTitle('Task Management')
+    .setDescription('Task Management System')
+    .setVersion('1.0')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api/docs', app, document);
 
   // Enable Corse
   app.enableCors({
