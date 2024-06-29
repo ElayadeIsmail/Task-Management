@@ -75,35 +75,6 @@ export class AuthenticationService {
     return this.setTokenToCookies(user, response);
   }
 
-  private async setTokenToCookies(
-    user: Pick<User, 'id' | 'username'>,
-    response: Response,
-  ) {
-    const [accessToken, refreshToken] = await Promise.all([
-      this.signToken(user.id, this.jwtConfiguration.accessTokenTTL, {
-        username: user.username,
-      }),
-      this.signToken(user.id, this.jwtConfiguration.refreshTokenTTL, {
-        username: user.username,
-      }),
-    ]);
-
-    response.cookie(COOKIE_ACCESS_TOKEN_KEY, accessToken, {
-      secure: true,
-      httpOnly: true,
-      sameSite: true,
-      maxAge: this.jwtConfiguration.accessTokenTTL * 1000,
-    });
-    response.cookie(COOKIE_REFRESH_TOKEN_KEY, refreshToken, {
-      secure: true,
-      httpOnly: true,
-      sameSite: true,
-      maxAge: this.jwtConfiguration.refreshTokenTTL * 1000,
-    });
-
-    return { id: user.id, username: user.username };
-  }
-
   async refreshToken(refreshToken: string, response: Response) {
     try {
       const payload = await this.jwtService.verifyAsync<ActiveUserData>(
@@ -141,6 +112,51 @@ export class AuthenticationService {
     }
 
     return user;
+  }
+
+  logout(response: Response) {
+    response.cookie(COOKIE_ACCESS_TOKEN_KEY, null, {
+      secure: true,
+      httpOnly: true,
+      sameSite: true,
+      maxAge: 0,
+    });
+    response.cookie(COOKIE_REFRESH_TOKEN_KEY, null, {
+      secure: true,
+      httpOnly: true,
+      sameSite: true,
+      maxAge: 0,
+    });
+    return {};
+  }
+
+  private async setTokenToCookies(
+    user: Pick<User, 'id' | 'username'>,
+    response: Response,
+  ) {
+    const [accessToken, refreshToken] = await Promise.all([
+      this.signToken(user.id, this.jwtConfiguration.accessTokenTTL, {
+        username: user.username,
+      }),
+      this.signToken(user.id, this.jwtConfiguration.refreshTokenTTL, {
+        username: user.username,
+      }),
+    ]);
+
+    response.cookie(COOKIE_ACCESS_TOKEN_KEY, accessToken, {
+      secure: true,
+      httpOnly: true,
+      sameSite: true,
+      maxAge: this.jwtConfiguration.accessTokenTTL * 1000,
+    });
+    response.cookie(COOKIE_REFRESH_TOKEN_KEY, refreshToken, {
+      secure: true,
+      httpOnly: true,
+      sameSite: true,
+      maxAge: this.jwtConfiguration.refreshTokenTTL * 1000,
+    });
+
+    return { id: user.id, username: user.username };
   }
 
   private async signToken(
