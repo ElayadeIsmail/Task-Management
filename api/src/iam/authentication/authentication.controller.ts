@@ -8,6 +8,7 @@ import {
   Req,
   Res,
 } from '@nestjs/common';
+import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import { COOKIE_REFRESH_TOKEN_KEY } from '../iam.constants';
 import { AuthenticationService } from './authentication.service';
@@ -16,6 +17,7 @@ import { Public } from './decorators/public.decorator';
 import { SignInDto } from './dto/sign-in.dto';
 import { SignUpDto } from './dto/sign-up.dto';
 
+@ApiTags('authentication')
 @Controller('authentication')
 export class AuthenticationController {
   constructor(private readonly authenticationService: AuthenticationService) {}
@@ -50,11 +52,13 @@ export class AuthenticationController {
     return this.authenticationService.refreshToken(refreshToken, response);
   }
 
+  @ApiCookieAuth()
   @Get('/current-user')
   async currentUser(@ActiveUser('sub') currentUserId: string) {
     return this.authenticationService.currentUser(currentUserId);
   }
 
+  @ApiCookieAuth()
   @Post('/logout')
   async logout(@Res({ passthrough: true }) response: Response) {
     return this.authenticationService.logout(response);

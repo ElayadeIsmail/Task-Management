@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsNotEmpty,
   IsString,
@@ -8,6 +9,7 @@ import {
 import { Match } from '../decorators/match.decorator';
 
 export class SignUpDto {
+  @ApiProperty()
   @IsNotEmpty()
   @Matches(/^[a-zA-Z0-9_-]{4,12}$/, {
     message:
@@ -15,6 +17,7 @@ export class SignUpDto {
   })
   username: string;
 
+  @ApiProperty()
   @IsString()
   @MinLength(4)
   @MaxLength(20)
@@ -24,6 +27,7 @@ export class SignUpDto {
   })
   password: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   @Match('password', { message: "confirmPassword doesn't match password" })
   confirmPassword: string;
