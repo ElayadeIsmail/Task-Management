@@ -125,6 +125,24 @@ export class AuthenticationService {
     }
   }
 
+  async currentUser(currentUserId: string) {
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        id: currentUserId,
+      },
+      select: {
+        id: true,
+        username: true,
+      },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+
+    return user;
+  }
+
   private async signToken(
     userId: string,
     expiresIn: number,
