@@ -9,9 +9,6 @@ const props = defineProps<{
 
 <template>
   <div class="rounded-lg shadow p-4 cursor-pointer bg-white" :key="props.task.id">
-    <div class="flex items-center justify-end">
-      <TaskDeleteModal :task-id="task.id" />
-    </div>
     <span
       :class="
         cn('font-bold capitalize mb-2 line-clamp-1', {

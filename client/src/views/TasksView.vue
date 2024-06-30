@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/vue-query'
 import * as tasksApi from '@/api/tasks.api'
 import * as tasksAdapter from '@/adapter/tasks.adapter'
 import type { TaskStatus } from '@/types'
-import { TaskColumn } from '@/components/tasks'
+import { TaskColumn, TasksCreate } from '@/components/tasks'
 
 const { isPending, isError, data, error } = useQuery({
   queryKey: ['tasks'],
@@ -13,6 +13,9 @@ const { isPending, isError, data, error } = useQuery({
 
 <template>
   <main class="container py-12">
+    <div class="flex items-center justify-end mb-4">
+      <TasksCreate />
+    </div>
     <div v-if="isPending">Loading...</div>
     <div v-else-if="isError">An error has occurred: {{ error }}</div>
     <div v-else-if="data">
