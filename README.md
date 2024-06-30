@@ -20,12 +20,18 @@ This project is a full-stack web application built with NestJS for the backend a
 - **Prisma**: Next-generation ORM for TypeScript and JavaScript.
 - **PostgreSQL**: An open-source relational database.
 
+## Application Preview
+![Preview](tasks.gif)
+
+
+
 ## Getting Started
 
 ### Prerequisites
 
 - **Docker**: Make sure Docker is installed and running on your machine.
 - **Node.js**: Ensure you have Node.js installed for frontend development.
+
 
 ### Setup and Run the Project
 
