@@ -10,10 +10,11 @@ export const useAuthStore = defineStore('user', () => {
     const { status, data, message } = await authenticateUser(options)
     if (status === 'success') {
       user.value = data
+      return { status, data } as const
     } else {
       user.value = null
+      return { status, message } as const
     }
-    return { status, data, message }
   }
 
   return { user, authenticate }

@@ -5,10 +5,13 @@ import { Input } from '@/components/ui/input'
 import { toTypedSchema } from '@vee-validate/zod'
 import { useForm } from 'vee-validate'
 import * as z from 'zod'
-import * as authApi from '@/api/auth.api'
 import { ref } from 'vue'
+import { useAuthStore } from '@/stores/auth.store'
+import { useRouter } from 'vue-router'
 
 const formError = ref<null | string>(null)
+const authStore = useAuthStore()
+const router = useRouter()
 
 const formSchema = toTypedSchema(
   z.object({
@@ -23,12 +26,12 @@ const { isFieldDirty, handleSubmit, isSubmitting } = useForm({
 
 const onSubmit = handleSubmit(async (values) => {
   formError.value = null
-  const { status, data, message } = await authApi.authenticateUser({
+  const { status, message } = await authStore.authenticate({
     url: '/authentication/sign-in',
     body: values
   })
   if (status === 'success') {
-    console.log(data)
+    router.push('/')
   } else {
     formError.value = message
   }
