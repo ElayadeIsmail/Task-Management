@@ -1,5 +1,5 @@
 import { useAuthStore } from '@/stores/auth.store'
-import { HomeView, LoginView, RegisterView, TasksView } from '@/views'
+import { HomeView, LoginView, NotFoundView, RegisterView, TasksView } from '@/views'
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
 const routes: RouteRecordRaw[] = [
@@ -25,6 +25,11 @@ const routes: RouteRecordRaw[] = [
     path: '/tasks',
     component: TasksView,
     meta: { requiresAuth: true }
+  },
+  {
+    path: '/:catchAll(.*)',
+    name: 'NotFound',
+    component: NotFoundView
   }
 ]
 
