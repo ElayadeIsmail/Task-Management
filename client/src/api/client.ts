@@ -24,6 +24,8 @@ client.interceptors.response.use(
     if (error.response) {
       const err = error.response?.data ? error.response?.data : error.response
       return Promise.reject(err)
+    } else {
+      return Promise.reject(error)
     }
   }
 )

@@ -19,3 +19,21 @@ export const authenticateUser = async ({ url, body }: AuthOPtions) => {
     return { status: 'error', message: getErrorMessage(error) } as const
   }
 }
+
+export const getCurrentUser = async () => {
+  try {
+    const result = await client.get<null, IAuthResult>('/authentication/current-user')
+    return { status: 'success', data: result } as const
+  } catch (error) {
+    return { status: 'error', message: getErrorMessage(error) } as const
+  }
+}
+
+export const refreshToken = async () => {
+  try {
+    const result = await client.post<null, IAuthResult>('/authentication/refresh-token', {})
+    return { status: 'success', data: result } as const
+  } catch (error) {
+    return { status: 'error', message: getErrorMessage(error) } as const
+  }
+}
