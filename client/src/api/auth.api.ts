@@ -15,7 +15,6 @@ export const authenticateUser = async ({ url, body }: AuthOPtions) => {
     const result = await client.post<null, IAuthResult>(url, body)
     return { status: 'success', data: result } as const
   } catch (error) {
-    console.log(error)
     return { status: 'error', message: getErrorMessage(error) } as const
   }
 }
