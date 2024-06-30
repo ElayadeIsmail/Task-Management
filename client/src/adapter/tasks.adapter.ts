@@ -1,6 +1,6 @@
 import { TaskStatus, type ITasksResult } from '@/types'
 
-export const tasksAdapter = (data: ITasksResult) => {
+export const adaptTasks = (data: ITasksResult) => {
   return data.reduce<{
     [TaskStatus.ToDo]: ITasksResult
     [TaskStatus.Pending]: ITasksResult
