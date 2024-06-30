@@ -5,6 +5,10 @@ import { Input } from '@/components/ui/input'
 import { toTypedSchema } from '@vee-validate/zod'
 import { useForm } from 'vee-validate'
 import * as z from 'zod'
+import * as authApi from '@/api/auth.api'
+import { ref } from 'vue'
+
+const formError = ref<null | string>(null)
 
 const formSchema = toTypedSchema(
   z.object({
@@ -13,17 +17,31 @@ const formSchema = toTypedSchema(
   })
 )
 
-const { isFieldDirty, handleSubmit } = useForm({
+const { isFieldDirty, handleSubmit, isSubmitting } = useForm({
   validationSchema: formSchema
 })
 
-const onSubmit = handleSubmit((values) => {
-  console.log('values', values)
+const onSubmit = handleSubmit(async (values) => {
+  formError.value = null
+  const { status, data, message } = await authApi.authenticateUser({
+    url: '/authentication/sign-in',
+    body: values
+  })
+  if (status === 'success') {
+    console.log(data)
+  } else {
+    formError.value = message
+  }
 })
 </script>
 
 <template>
   <form class="space-y-3" @submit="onSubmit">
+    <span
+      v-if="!!formError"
+      class="text-destructive flex justify-center mx-auto text-center font-medium"
+      >{{ formError }}</span
+    >
     <FormField v-slot="{ componentField }" name="username" :validate-on-blur="!isFieldDirty">
       <FormItem>
         <FormLabel>Username</FormLabel>
@@ -54,6 +72,6 @@ const onSubmit = handleSubmit((values) => {
       </FormItem>
     </FormField>
 
-    <Button class="w-full" size="lg" type="submit"> Submit </Button>
+    <Button class="w-full" :disabled="isSubmitting" size="lg" type="submit"> Submit </Button>
   </form>
 </template>
