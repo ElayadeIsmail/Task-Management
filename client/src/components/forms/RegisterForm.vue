@@ -55,7 +55,7 @@ const onSubmit = handleSubmit(async (values) => {
     body: values
   })
   if (status === 'success') {
-    router.push('/')
+    router.push('/tasks')
   } else {
     formError.value = message
   }

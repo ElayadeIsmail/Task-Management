@@ -1,4 +1,4 @@
-import { type AuthOPtions, authenticateUser } from '@/api/auth.api'
+import * as authApi from '@/api/auth.api'
 import type { IAuthResult } from '@/types'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
@@ -6,8 +6,8 @@ import { ref } from 'vue'
 export const useAuthStore = defineStore('user', () => {
   const user = ref<IAuthResult | null>(null)
 
-  async function authenticate(options: AuthOPtions) {
-    const { status, data, message } = await authenticateUser(options)
+  async function authenticate(options: authApi.AuthOPtions) {
+    const { status, data, message } = await authApi.authenticateUser(options)
     if (status === 'success') {
       user.value = data
       return { status, data } as const
@@ -17,5 +17,14 @@ export const useAuthStore = defineStore('user', () => {
     }
   }
 
-  return { user, authenticate }
+  async function hybridUser() {
+    const { status, data } = await authApi.getCurrentUser()
+    if (status === 'success') {
+      user.value = data
+    } else {
+      user.value = null
+    }
+  }
+
+  return { user, authenticate, hybridUser }
 })
