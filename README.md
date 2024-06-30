@@ -4,7 +4,7 @@
 
 ## Overview
 
-This project is a full-stack web application built with NestJS for the backend and Vue 3 for the frontend. The backend uses Prisma and PostgreSQL, while the frontend utilizes Pinia for state management, Vue Query for data fetching, and TailwindCSS with ShadCN UI for styling.
+This project is a full-stack web application built with NestJS for the backend and Vue 3 for the frontend. The backend uses Prisma and PostgreSQL, while the frontend utilizes Pinia for state management, Vue Query for data fetching, and TailwindCSS with shadcn-vue for styling.
 
 ## Tools and Technologies
 
@@ -13,7 +13,7 @@ This project is a full-stack web application built with NestJS for the backend a
 - **Pinia**: State management library for Vue.
 - **Vue Query**: Data fetching and state synchronization library.
 - **TailwindCSS**: Utility-first CSS framework.
-- **ShadCN UI**: A collection of styled components for TailwindCSS.
+- **shadcn-vue**: A collection of styled components for TailwindCSS.
 
 ### Backend
 - **NestJS**: A progressive Node.js framework for building efficient, reliable, and scalable server-side applications.
