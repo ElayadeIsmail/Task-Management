@@ -27,7 +27,7 @@ const startDrag = (evt: DragEvent, task: ITask) => {
     </div>
     <span
       :class="
-        cn('font-bold capitalize mb-2 line-clamp-1', {
+        cn('font-bold capitalize mb-2', {
           'line-through': props.status === TaskStatus.Done
         })
       "
