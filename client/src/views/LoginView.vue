@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
+import { LoginForm } from '@/components/forms'
 </script>
 
 <template>
@@ -12,6 +13,7 @@ import { RouterLink } from 'vue-router'
       <div className="mx-auto space-y-4 w-full max-w-md px-8 mt-8">
         <hr />
         <!-- Form To Be here -->
+        <LoginForm />
         <div className="flex items-center justify-center gap-2 ">
           <span className="text-muted-foreground">New here?</span>
           <RouterLink to="/register">Create an account</RouterLink>
