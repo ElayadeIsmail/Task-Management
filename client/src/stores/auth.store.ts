@@ -26,5 +26,14 @@ export const useAuthStore = defineStore('user', () => {
     }
   }
 
-  return { user, authenticate, hybridUser }
+  async function logoutUser() {
+    const { status, message } = await authApi.logout()
+    if (status === 'success') {
+      user.value = null
+    } else {
+      throw Error(message)
+    }
+  }
+
+  return { user, authenticate, hybridUser, logoutUser }
 })

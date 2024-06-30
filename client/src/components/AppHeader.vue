@@ -1,9 +1,20 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 import { Button } from './ui/button'
 import { useAuthStore } from '@/stores/auth.store'
 
 const authStore = useAuthStore()
+const router = useRouter()
+
+const logout = async () => {
+  try {
+    await authStore.logoutUser()
+    router.push('/login')
+  } catch (err) {
+    // Better add a toast to let the user know that something went wrong
+    console.log('err', err)
+  }
+}
 </script>
 
 <template>
@@ -17,7 +28,7 @@ const authStore = useAuthStore()
             <Button variant="secondary">Tasks</Button>
           </RouterLink>
 
-          <Button>Logout</Button>
+          <Button @click="logout">Logout</Button>
         </template>
 
         <!-- Not Auth -->

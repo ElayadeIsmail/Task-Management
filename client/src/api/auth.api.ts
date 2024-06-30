@@ -37,3 +37,12 @@ export const refreshToken = async () => {
     return { status: 'error', message: getErrorMessage(error) } as const
   }
 }
+
+export const logout = async () => {
+  try {
+    const result = await client.post<null, IAuthResult>('/authentication/logout', {})
+    return { status: 'success', data: result } as const
+  } catch (error) {
+    return { status: 'error', message: getErrorMessage(error) } as const
+  }
+}
