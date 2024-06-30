@@ -6,6 +6,13 @@ import * as z from 'zod'
 import { Button } from '@/components/ui/button'
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { ref } from 'vue'
+import { useAuthStore } from '@/stores/auth.store'
+import { useRouter } from 'vue-router'
+
+const formError = ref<null | string>(null)
+const authStore = useAuthStore()
+const router = useRouter()
 
 const formSchema = toTypedSchema(
   z
@@ -42,12 +49,26 @@ const { isFieldDirty, handleSubmit, isSubmitting } = useForm({
 })
 
 const onSubmit = handleSubmit(async (values) => {
-  console.log('values', values)
+  formError.value = null
+  const { status, message } = await authStore.authenticate({
+    url: '/authentication/sign-up',
+    body: values
+  })
+  if (status === 'success') {
+    router.push('/')
+  } else {
+    formError.value = message
+  }
 })
 </script>
 
 <template>
   <form class="space-y-3" @submit="onSubmit">
+    <span
+      v-if="!!formError"
+      class="text-destructive flex justify-center mx-auto text-center font-medium"
+      >{{ formError }}</span
+    >
     <FormField v-slot="{ componentField }" name="username" :validate-on-blur="!isFieldDirty">
       <FormItem>
         <FormLabel>Username</FormLabel>
