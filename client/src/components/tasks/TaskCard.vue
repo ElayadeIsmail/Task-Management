@@ -5,10 +5,22 @@ const props = defineProps<{
   task: ITask
   status: TaskStatus
 }>()
+
+const startDrag = (evt: DragEvent, task: ITask) => {
+  if (!evt.dataTransfer) return
+  evt.dataTransfer.dropEffect = 'move'
+  evt.dataTransfer.effectAllowed = 'move'
+  evt.dataTransfer.setData('task', JSON.stringify(task))
+}
 </script>
 
 <template>
-  <div class="rounded-lg shadow p-4 cursor-pointer bg-white" :key="props.task.id">
+  <div
+    draggable="true"
+    @dragstart="startDrag($event, task)"
+    class="rounded-lg shadow p-4 cursor-pointer bg-white"
+    :key="props.task.id"
+  >
     <span
       :class="
         cn('font-bold capitalize mb-2 line-clamp-1', {
